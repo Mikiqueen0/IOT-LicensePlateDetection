@@ -1,0 +1,59 @@
+# Ignore environment files
+.env
+.env.*
+*.env
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore Docker local files
+*.log
+*.env
+*.env.*
+
+# Ignore Docker related files
+docker-compose.override.yaml
+docker-compose.*.yaml
+Dockerfile.*
+*.dockerfile
+
+# Ignore local development files and IDEs
+.vscode/
+.idea/
+
+# Ignore sensitive files
+*.pem
+*.key
+*.crt
+*.p12
+
+# Ignore build directories
+build/
+dist/
+
+# Ignore package manager files (if using Node.js)
+node_modules/
+
+# Ignore Yarn or NPM cache files
+.yarn/
+npm-debug.log
+yarn-error.log
+
+# Ignore compiled or minified assets
+*.min.js
+*.bundle.js
+
+# Ignore log files
+*.log
+*.log.*
+
+# Ignore virtual environment directories (for Python)
+venv/
+env/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
