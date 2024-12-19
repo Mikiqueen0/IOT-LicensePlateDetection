@@ -1,58 +1,125 @@
-# Pedestrian crossing system designed to enhance crosswalk safety (ระบบทางเดินทางม้าลายที่ส่งเสริมการข้ามทางม้าลายที่มีความปลอดภัย) 
 
-เป็นระบบทางเดินม้าลายให้มีความปลอดภัยต่อตัวผู้ข้ามทางม้าลาย เเละลดการเกิดอุบัติเหตุบนทางเดินม้าลาย เพื่อคำนึงถึงความปลอดภัยของคนที่จะข้ามทางม้าลายที่เมื่อรถยนต์หรือมอเตอร์ไซต์ขับมาด้วยความเร็วที่สามารถจะชนคนข้ามถนนได้
+# IOT-LicensePlateDetection
 
-# Content
- - [วัตถุประสงค์](#วัตถุประสงค์)
- - [อุปกรณ์ที่ใช้ในโครงงาน](#อุปกรณ์ที่ใช้ในโครงงาน)
- - [Framework](#Framework)
- - [ขั้นตอนกาารทำงาน](#ขั้นตอนการทำงาน)
+This project provides an API for detecting and recognizing Thai license plate numbers and provinces from images using [YOLO11](https://docs.ultralytics.com/models/yolo11/) and [thai-trocr](https://huggingface.co/openthaigpt/thai-trocr) models.
 
+## Features
+- Detects license plates and provinces from input images URL.
+- Performs text recognition on detected license plates using the TrOCR model.
+- Matches recognized text with predefined Thai province names using Levenshtein distance.
 
-# วัตถุประสงค์
+---
 
- - ต้องการเพิ่มความปลอดภัยของทางม้าลาย
- - ต้องการให้ผู้ใช้รถ หยุดรถเพื่อให้คนข้ามทางม้าลายก่อน
- - ต้องการตรวจจับคนที่อยู่บนทางม้าลาย เพื่อความปลอดภัยของคนข้าม
- 
-# อุปกรณ์ที่ใช้ในโครงงาน 
-- Ultrasonic Sensor 1 ตัว
+## Installation
 
-- IR Infrared Sensor 1 ตัว
+### Prerequisites
+- Python 3.9 or later
+- Docker (optional for containerized deployment)
 
-- จอแสดงผล OLED 1 ตัว
+### Clone the Repository
+```bash
+git clone https://github.com/Mikiqueen0/IOT-LicensePlateDetection.git
+cd IOT-LicensePlateDetection
+```
+### Install Dependencies
 
-- ESP32 1 ตัว
+Using pip:
+```bash
+pip install -r requirements.txt
+```
 
-- โมดูลไฟจราจร 2 ตัว
+Using Docker:
+1. Build the Docker image:
+	```bash
+	docker build -t license-plate-detection .
+	```
+2. Run the container:
+	```bash
+	docker run -p 8000:8000 license-plate-detection
+	```
 
-- Buzzer 1 ตัว
+## Usage
 
-- ไม้กั้น
+### Running the Application
 
-- Button Switch 1 ตัว
+Run the application locally using:
+```bash
+uvicorn main:app --host 0.0.0.0 --port 8000
+```
 
-- Servo SG90 1 ตัว
+### API Endpoints
 
-- โมดูล ESP32-Cam 1 ตัว
+#### 1. Root Endpoint
 
-- Breadboard
+**URL**: `/`  
+**Method**: `GET`  
+**Response**:
+```bash
+{
+  "details": "OCR and YOLO processing app"
+}
+```
 
-- สาย Jumper
+#### 2. Process Image
 
-- Plastwood
+**URL**: `/process-image/`  
+**Method**: `POST`  
+**Input**:
+```bash
+{
+  "image_path": "https://example.com/path/to/image.jpg"
+}
+```
 
-# Framework
- - Arduino IDE
- - Firebase
- - React
-# ขั้นตอนการทำงาน
-**กรณีตรวจจับคนข้ามทางม้าลาย**
- กด Button Switch เพื่อส่งสัญญาณไฟเเดงให้รถยนต์หยุด ในส่วนนี้จะเป็นการทำงานของ *Ultrasonic Sensor* เพื่อตรวจจับคนบนทางม้าลายว่าพบเจอคนบนทางม้าลายหรือไม่ 
-- ถ้าเจอสัญญาณไฟจะยังเเดงอยู่
-- ถ้าไม่เจอสัญญาณไฟจะเป็นสีเขียวเพื่ออนุญาติให้รถขับต่อได้
+**Response**:
 
-**กรณีตรวจจับรถยนต์ที่ขับชนไม้กั้น**
-เมื่อรถยนต์เกิดการชนไม้กั้น ในส่วนนี้จะเป็นการทำงานของ *IR Infrared Sensor* เเละ *โมดูล ESP32-Cam* เพื่อนำข้อมูลไปบันทึกลง Database เเละปรากฎบนเว็บ [https://iot-zebra-a7889.web.app/](https://iot-zebra-a7889.web.app/)
+-   On success:
+```bash
+{
+  "plate_number": "XYZ1234",
+  "province": "กรุงเทพมหานคร",
+  "raw_province": "บางกอก"
+}
+```
+- On failure:
+```bash
+{
+  "error": "Error message"
+}
+```
+## Project Structure
 
+### Running the Application
+Project Structure
+```bash
+.
+├── main.py               # ไฟล์หลักสำหรับแอปพลิเคชัน FastAPI
+├── Dockerfile            # Dockerfile สำหรับ containerizing แอปพลิเคชัน
+├── requirements.txt      # รายการ dependencies
+├── best.pt               # YOLO model weights
+```
 
+## Models Used
+
+1.  [**YOLO11**](https://docs.ultralytics.com/models/yolo11/): Used for object detection (detects license plates and province areas in the image).
+2.  [**thai-trocr**](https://huggingface.co/openthaigpt/thai-trocr): Used for text recognition on cropped license plate images.
+
+## How It Works
+
+1.  Input image URL is provided via the API.
+2.  The image is processed with YOLO to detect bounding boxes for license plates and provinces.
+3.  The detected regions are passed to the TrOCR model for text recognition.
+4.  The recognized text is matched against a list of Thai provinces using Levenshtein distance for the best match.
+
+## Dependencies
+
+-   [FastAPI](https://fastapi.tiangolo.com)
+-   [Ultralytics YOLO](https://docs.ultralytics.com)
+-   Transformers
+-   [OpenCV](https://opencv.org/)
+-   [Levenshtein](https://github.com/ztane/python-Levenshtein)
+
+Install them using:
+```bash
+pip install -r requirements.txt
+```
