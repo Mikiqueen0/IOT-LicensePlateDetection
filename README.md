@@ -56,5 +56,5 @@
 เมื่อรถยนต์เกิดการชนไม้กั้น ในส่วนนี้จะเป็นการทำงานของ *IR Infrared Sensor* เเละ *โมดูล ESP32-Cam* เพื่อนำข้อมูลไปบันทึกลง Database เเละปรากฎบนเว็บ [https://iot-zebra-a7889.web.app/](https://iot-zebra-a7889.web.app/)
 
 **ภาพตัวอย่างโมเดล**
- 
-(https://media.discordapp.net/attachments/1162453582235308224/1318570786629353523/IMG_9642.jpg?ex=676376fd&is=6762257d&hm=6f123188b05f57691f3a67b47d70c6c945df23fcf0c35084bdeabc67a8944927&=&format=webp&width=496&height=662)
+![image](https://github.com/user-attachments/assets/ce1e7d44-6071-4440-9202-11733657dc96)
+
